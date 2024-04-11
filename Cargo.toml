@@ -1,0 +1,16 @@
+[package]
+name = "one-max-genetic-algorithm-rust"
+authors = ["mcrespo <info@mcrespo.es>"]
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rand = "0.8"
+tqdm = "0.7"
+num_cpus = "1"
+
+
+[dev-dependencies]
+assert_approx_eq = "1.1"
