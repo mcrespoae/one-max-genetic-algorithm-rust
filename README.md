@@ -97,6 +97,8 @@ Or, they can be executed using the Make command.
 ```bash
 make test
 ```
+## Python implementation
+I've also developed this repository in [Python](https://github.com/mcrespoae/one-max-genetic-algorithm-rust), achieving an average execution time that's 3.4 times slower compared to Rust.
 
 ## Contributors
 
