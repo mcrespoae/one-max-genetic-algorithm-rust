@@ -5,7 +5,7 @@ use one_max_genetic_algorithm::*;
 
 #[cfg(test)]
 
-mod tests {
+mod unit_tests {
     use super::*;
 
     #[test]
@@ -263,6 +263,68 @@ mod tests {
         assert_eq!(mutated_genome.len(), 4);
     }
 
+
+    #[test]
+    fn test_mutate_population_fitness_all_ones() {
+        let num_times = 100_000;
+        let mutation_rate = 0.5;
+        let genome_length = 50;
+        let mut mutated_gen_fitness = Vec::new();
+        let genome = vec![1; genome_length];
+        for _ in 0..num_times {
+            let mutated_genome = mutate(&genome, mutation_rate);
+            mutated_gen_fitness.push(get_genome_fitness(&mutated_genome));
+        }
+
+        let avg_mutation_gen_fitness: f64 = mutated_gen_fitness.iter().sum::<f64>() / mutated_gen_fitness.len() as f64;
+        assert!(0.49 <= avg_mutation_gen_fitness && avg_mutation_gen_fitness <= 0.51);
+    }
+
+    #[test]
+    fn test_mutate_population_fitness_all_zeroes() {
+        let num_times = 100_000;
+        let mutation_rate = 0.5;
+        let genome_length = 50;
+        let mut mutated_gen_fitness = Vec::new();
+        let genome = vec![0; genome_length];
+
+        for _ in 0..num_times {
+            let mutated_genome = mutate(&genome, mutation_rate);
+            mutated_gen_fitness.push(get_genome_fitness(&mutated_genome));
+        }
+
+        let avg_mutation_gen_fitness: f64 = mutated_gen_fitness.iter().sum::<f64>() / mutated_gen_fitness.len() as f64;
+        assert!(0.49 <= avg_mutation_gen_fitness && avg_mutation_gen_fitness <= 0.51);
+    }
+
+    #[test]
+    fn test_population_size_odd() {
+        let population_size = 101;
+        let population: Vec<Vec<u8>> = vec![vec![0, 1, 0, 1]; population_size];
+        let fitness_values: Vec<f64> = vec![0.5; population_size];
+        let select_parent_mode = "tournament";
+        let crossover_rate = 0.8;
+        let mutation_rate = 0.03;
+
+        let population_fitness = calculate_population_fitness(&population);
+        let population_fitness_avg = get_generation_fitness(&population_fitness, population_size);
+
+        let new_population = create_new_population(
+            population_size,
+            &population,
+            &fitness_values,
+            select_parent_mode,
+            crossover_rate,
+            mutation_rate,
+        );
+
+        let new_population_fitness = calculate_population_fitness(&new_population);
+        let new_population_fitness_avg = get_generation_fitness(&new_population_fitness, population_size);
+
+        assert_eq!(new_population.len(), population_size);
+        assert!(population_fitness_avg * 0.8 <= new_population_fitness_avg);
+    }
+
     #[test]
     fn test_genetic_algorithm_custom_parameters() {
         // Test with custom parameters
@@ -295,4 +357,94 @@ mod tests {
         assert!(best_fitness >= 0.0 && best_fitness <= 1.0);
     }
 
+}
+
+
+
+mod integration_tests {
+    use super::*;
+    #[test]
+    fn test_inte_new_population_random() {
+        // Test with custom parameters
+        let population_size = 50;
+        let genome_length = 20;
+        let num_times = 200;
+
+        let mut random_fitness = Vec::new();
+        for _ in 0..num_times {
+            let population = init_population(population_size, genome_length);
+            let fitness_values = calculate_population_fitness(&population);
+            let generation_fitness = get_generation_fitness(&fitness_values, population_size);
+            random_fitness.push(generation_fitness);
+        }
+
+        let fitness_avg: f64 = random_fitness.iter().sum::<f64>() / random_fitness.len() as f64;
+        assert!(0.49 <= fitness_avg && fitness_avg <= 0.51);
+    }
+
+    #[test]
+    fn test_inte_new_population_zeroes() {
+        // Test with custom parameters
+        let population_size = 1_000;
+        let genome_length = 50;
+        let crossover_rate = 0.2;
+        let mutation_rate = 0.03;
+
+        let genome = vec![0; genome_length];
+        let population = vec![genome.clone(); population_size];
+        let fitness_values = calculate_population_fitness(&population);
+        let mut new_population = Vec::new();
+
+        for _ in 0..population_size / 2 {
+            let parent1 = select_parent(&population, &fitness_values, "tournament");
+            let parent2 = select_parent(&population, &fitness_values, "roulette");
+            let (offspring1, offspring2) = crossover(&parent1, &parent2, crossover_rate);
+            new_population.push(mutate(&offspring1, mutation_rate));
+            new_population.push(mutate(&offspring2, mutation_rate));
+        }
+        if population_size % 2 != 0{
+            let parent = select_parent(&population, &fitness_values, "roulette");
+            new_population.push(mutate(&parent, mutation_rate));
+        }
+
+        let fitness_values = calculate_population_fitness(&new_population);
+        let generation_fitness = get_generation_fitness(&fitness_values, population_size);
+
+        assert!(0.02 <= generation_fitness && generation_fitness <= 0.04);
+    }
+
+    #[test]
+    fn test_inte_get_avg() {
+        // Test with custom parameters
+        let population_size = 1_000;
+        let genome_length = 20;
+        let crossover_rate = 0.6;
+        let mutation_rate = 0.07;
+        let num_times = 10;
+
+        let genome = vec![0u8; genome_length];
+        let population = vec![genome.clone(); population_size];
+        let mut generation_fitness = Vec::new();
+        let mut best_genome_fitness = Vec::new();
+
+        for _ in 0..num_times {
+            let new_population = create_new_population(
+                population_size,
+                &population,
+                &calculate_population_fitness(&population),
+                "roulette",
+                crossover_rate,
+                mutation_rate,
+            );
+            let fitness_values = calculate_population_fitness(&new_population);
+            generation_fitness.push(get_generation_fitness(&fitness_values, population_size));
+            best_genome_fitness.push(get_best_fitness(&fitness_values));
+        }
+
+        let avg_best_fitness: f64 = generation_fitness.iter().sum::<f64>() / num_times as f64;
+        let avg_best_genome_fitness: f64 = best_genome_fitness.iter().sum::<f64>() / num_times as f64;
+
+        assert!(0.069 <= avg_best_fitness && avg_best_fitness <= 0.71);
+        assert!(0.25 <= avg_best_genome_fitness && avg_best_genome_fitness <= 0.45);
+    }
 }

@@ -31,7 +31,7 @@ make build
     - `results.rs`: Contains a class for storing and computing the results of the genetic algorithm.
     - `utils.rs`: Contains helper functions.
 - `tests`
-    - `test_one_max_genetic_algorithm.rs`: Unittests for the genetic algorithm.
+    - `test_one_max_genetic_algorithm.rs`: Unit and integration tests for the genetic algorithm.
     - `test_results.rs`: Unittests for the Results class.
     - `test_utils.rs`: Unittests for the utils file.
 
@@ -52,6 +52,7 @@ You can adjust various parameters in `main.rs` to customize the genetic algorith
 - `GENERATIONS`: Number of generations in the genetic algorithm.
 - `POPULATION_SIZE`: Size of the population in each generation.
 - `GENOME_LENGTH`: Length of the binary string.
+- `SELECT_PARENT_MODE`: Type of parent selection. Options include "tournament" or "roulette". Tournament selection typically converges faster and produces better results.
 - `TARGET_GENERATION_FITNESS`: Target fitness for a generation to be considered successful and skip the next iterations. From 0 to 1. Values close to 1.0 will yield better results.
 - `TARGET_PROBLEM_FITNESS`: Target fitness for the whole problem to be marked as solved. From 0 to 1. Values very close to 1.0 will not stop the execution.
 - `MUTATION_RATE_MIN`: Minimum mutation rate.
@@ -87,7 +88,7 @@ The project includes functionality for processing the genetic algorithm with dif
 The genetic algorithm employs concurrent processing techniques for parallel execution, enhancing runtime performance.
 
 ## Testing
-The code is equipped with comprehensive unit tests to ensure reliability.
+The code is equipped with comprehensive unit and integration tests to ensure reliability.
 
 To execute them, use the command:
 ```bash

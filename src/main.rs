@@ -14,20 +14,18 @@ mod results;
 use results::Results;
 
 
-
-
 // Constants
 const RUN_TIMES: usize = 10;
 const GENERATIONS: u32 = 500;
 const POPULATION_SIZE: usize = 90;
 const GENOME_LENGTH: usize = 25;
 const SELECT_PARENT_MODE: &str = "tournament"; // tournament or roulette. Tournament usually converges faster and yields better results.
-const TARGET_GENERATION_FITNESS: f64 = 0.99999; // When a generation is considered fit enough to skip the next iterations. Values close to 1.0 will yield better results.
+const TARGET_GENERATION_FITNESS: f64 = 0.995; // When a generation is considered fit enough to skip the next iterations. Values close to 1.0 will yield better results.
 const TARGET_PROBLEM_FITNESS: f64 = 0.999;  // When the problem is marked as solved. Values very close to 1.0 will not stop the execution.
-const MUTATION_RATE_MIN: f64 = 0.0;
+const MUTATION_RATE_MIN: f64 = 0.001;
 const MUTATION_RATE_MAX: f64 = 0.01;
 const CROSSOVER_RATE_MIN: f64 = 0.1;
-const CROSSOVER_RATE_MAX: f64 = 0.8;
+const CROSSOVER_RATE_MAX: f64 = 0.6;
 
 
 
@@ -88,13 +86,6 @@ pub fn process_genetic_algorithm(mutation_rate_values: &[f64], crossover_rate_va
 
             let result = result.lock().unwrap();
             score = result.get_score();
-
-
-
-            //println!("Prev best score: {prev_best_score}");
-            //println!("Score:           {score}");
-            //println!("-------------------");
-
 
             // General score check
             if score >= prev_best_score{
