@@ -443,8 +443,7 @@ mod integration_tests {
 
         let avg_best_fitness: f64 = generation_fitness.iter().sum::<f64>() / num_times as f64;
         let avg_best_genome_fitness: f64 = best_genome_fitness.iter().sum::<f64>() / num_times as f64;
-
-        assert!(0.06 <= avg_best_fitness && avg_best_fitness <= 0.72);
+        assert!(0.06 <= avg_best_fitness && avg_best_fitness <= 0.073);
         assert!(0.25 <= avg_best_genome_fitness && avg_best_genome_fitness <= 0.45);
     }
 }
