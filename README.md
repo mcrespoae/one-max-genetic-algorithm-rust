@@ -98,6 +98,11 @@ Or, they can be executed using the Make command.
 ```bash
 make test
 ```
+**_Note:_** When running the `cargo test` command, expensive tests are ignored. However, when using `make test`, all tests, including the ignored ones, will be triggered.
+
+## CI/CD
+This project features a lightweight CI/CD setup in the form of GitHub workflows. It includes a single job comprising several steps for auditing vulnerabilities, testing, and linting options.
+
 ## Python implementation
 I've also developed this repository in [Python](https://github.com/mcrespoae/one-max-genetic-algorithm-python), achieving an average execution time that's 3.4 times slower compared to Rust.
 

@@ -258,6 +258,7 @@ mod unit_tests {
     }
 
     #[test]
+    #[ignore] // it is too expensive for gitgub actions
     fn test_mutate_population_fitness_all_ones() {
         let num_times = 100_000;
         let mutation_rate = 0.5;
@@ -276,6 +277,7 @@ mod unit_tests {
     }
 
     #[test]
+    #[ignore] // it is too expensive for gitgub actions
     fn test_mutate_population_fitness_all_zeroes() {
         let num_times = 100_000;
         let mutation_rate = 0.5;
@@ -295,6 +297,7 @@ mod unit_tests {
     }
 
     #[test]
+    #[ignore] // it is too expensive for gitgub actions
     fn test_population_size_odd() {
         let population_size = 101;
         let population: Vec<Vec<u8>> = vec![vec![0, 1, 0, 1]; population_size];
@@ -324,6 +327,7 @@ mod unit_tests {
     }
 
     #[test]
+    #[ignore] // it is too expensive for gitgub actions
     fn test_genetic_algorithm_custom_parameters() {
         // Test with custom parameters
         let population_size = 50;

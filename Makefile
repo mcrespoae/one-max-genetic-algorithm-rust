@@ -14,6 +14,7 @@ build-preview:
 
 test:
 	cargo test
+	cargo test -- --ignored
 
 clean:
 	cargo clean

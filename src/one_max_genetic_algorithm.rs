@@ -135,12 +135,11 @@ pub fn mutate(genome: &[u8], mutation_rate: f64) -> Vec<u8> {
     let mut rng = thread_rng();
     let mut mutated_genome = genome.to_vec();
 
-    for i in 0..genome.len() {
+    for gene in mutated_genome.iter_mut().take(genome.len()) {
         if rng.gen::<f64>() < mutation_rate {
-            mutated_genome[i] ^= 1; // XOR operator, change a 0 to a 1 and vice versa
+            *gene ^= 1;
         }
     }
-
     mutated_genome
 }
 
