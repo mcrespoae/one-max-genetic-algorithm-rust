@@ -11,12 +11,12 @@ pub struct Results {
     pub avg_generation: f64,
     pub avg_generation_fitness: f64,
     pub avg_best_fitness: f64,
-    pub best_fitness: f64
+    pub best_fitness: f64,
 }
 
 impl Results {
-    pub fn new(max_generations: u32, max_fitness: f64) -> Self{
-        Results{
+    pub fn new(max_generations: u32, max_fitness: f64) -> Self {
+        Results {
             max_generations,
             max_fitness,
             generations: Vec::new(),
@@ -39,7 +39,7 @@ impl Results {
     }
 
     pub fn set_overall_values(&mut self) {
-        self.total_generations = self.generations.len() as usize;
+        self.total_generations = self.generations.len();
 
         self.avg_generation = if self.total_generations > 0 {
             self.generations.iter().sum::<u32>() as f64 / self.total_generations as f64
@@ -56,7 +56,11 @@ impl Results {
         } else {
             0.0
         };
-        self.best_fitness = *self.best_fitnesses.iter().max_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal)).unwrap_or(&0.0);
+        self.best_fitness = *self
+            .best_fitnesses
+            .iter()
+            .max_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal))
+            .unwrap_or(&0.0);
         self.calculate_ponderate_score();
     }
 
@@ -74,29 +78,31 @@ impl Results {
 
         // Adjusting the scores based on criteria
         let score_best_fitness: f64 = self.best_fitness / self.max_fitness;
-        let score_avg_generation: f64 = 1.0 - (self.avg_generation - 1.0) / self.max_generations as f64;  // Inverting the avg_generation score and scaling it to 0-1 range
-        let score_avg_generation_fitness: f64 = self.avg_generation_fitness;  // avg_generation_fitness already in desired range
-        let score_avg_best_fitness: f64 = self.avg_best_fitness / self.max_fitness;  // Scaling avg_best_fitness to 0-1 range
+        let score_avg_generation: f64 =
+            1.0 - (self.avg_generation - 1.0) / self.max_generations as f64; // Inverting the avg_generation score and scaling it to 0-1 range
+        let score_avg_generation_fitness: f64 = self.avg_generation_fitness; // avg_generation_fitness already in desired range
+        let score_avg_best_fitness: f64 = self.avg_best_fitness / self.max_fitness; // Scaling avg_best_fitness to 0-1 range
 
         // Calculate the ponderate score
-        self.score = weight_best_fitness * score_best_fitness +
-                     weight_avg_generation * score_avg_generation +
-                     weight_avg_generation_fitness * score_avg_generation_fitness +
-                     weight_avg_best_fitness * score_avg_best_fitness;
+        self.score = weight_best_fitness * score_best_fitness
+            + weight_avg_generation * score_avg_generation
+            + weight_avg_generation_fitness * score_avg_generation_fitness
+            + weight_avg_best_fitness * score_avg_best_fitness;
     }
 
     pub fn get_score(&self) -> f64 {
         self.score
     }
 
+    #[allow(dead_code)]
     pub fn print(&self) {
         println!("Overall Score:          {:.3}", self.score);
         println!("Best Fitness:           {}", self.best_fitness);
         println!("Avg Generation Fitness: {:.3}", self.avg_generation_fitness);
         println!("Avg Best Fitness:       {:.3}", self.avg_best_fitness);
-        println!("Avg Generations Run:    {:.3} of {}", self.avg_generation, self.max_generations);
+        println!(
+            "Avg Generations Run:    {:.3} of {}",
+            self.avg_generation, self.max_generations
+        );
     }
-
 }
-
-

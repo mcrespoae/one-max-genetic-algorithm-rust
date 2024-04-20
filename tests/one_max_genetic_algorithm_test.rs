@@ -2,7 +2,6 @@
 mod one_max_genetic_algorithm;
 use one_max_genetic_algorithm::*;
 
-
 #[cfg(test)]
 
 mod unit_tests {
@@ -158,15 +157,14 @@ mod unit_tests {
         assert!((actual_generation_fitness - expected_generation_fitness).abs() < epsilon);
     }
 
-
     #[test]
     fn test_select_parent() {
         // Test scenario with a small population
         let population = vec![
-            vec![1, 1, 1, 1],  // Individual 1
-            vec![1, 0, 1, 0],  // Individual 2
-            vec![0, 0, 1, 1],  // Individual 3
-            vec![0, 0, 0, 0],  // Individual 4
+            vec![1, 1, 1, 1], // Individual 1
+            vec![1, 0, 1, 0], // Individual 2
+            vec![0, 0, 1, 1], // Individual 3
+            vec![0, 0, 0, 0], // Individual 4
         ];
         let fitness_values = calculate_population_fitness(&population);
 
@@ -175,20 +173,20 @@ mod unit_tests {
         assert!(population.contains(&selected_individual)); // Ensure the selected individual is from the population
     }
 
-
     #[test]
     fn test_select_parent_tournament() {
         // Test scenario with a small population
         let population = vec![
-            vec![1, 1, 1, 1],  // Individual 1
-            vec![1, 0, 1, 0],  // Individual 2
-            vec![0, 0, 1, 1],  // Individual 3
-            vec![0, 0, 0, 0],  // Individual 4
+            vec![1, 1, 1, 1], // Individual 1
+            vec![1, 0, 1, 0], // Individual 2
+            vec![0, 0, 1, 1], // Individual 3
+            vec![0, 0, 0, 0], // Individual 4
         ];
         let fitness_values = calculate_population_fitness(&population);
         let tournament_size = 2;
 
-        let selected_individual = select_parent_tournament(&population, &fitness_values, tournament_size);
+        let selected_individual =
+            select_parent_tournament(&population, &fitness_values, tournament_size);
         assert!(population.contains(&selected_individual)); // Ensure the selected individual is from the population
     }
 
@@ -196,10 +194,10 @@ mod unit_tests {
     fn test_select_parent_roulette() {
         // Test scenario with a small population
         let population = vec![
-            vec![1, 1, 1, 1],  // Individual 1
-            vec![1, 0, 1, 0],  // Individual 2
-            vec![0, 0, 1, 1],  // Individual 3
-            vec![0, 0, 0, 0],  // Individual 4
+            vec![1, 1, 1, 1], // Individual 1
+            vec![1, 0, 1, 0], // Individual 2
+            vec![0, 0, 1, 1], // Individual 3
+            vec![0, 0, 0, 0], // Individual 4
         ];
         let fitness_values = calculate_population_fitness(&population);
 
@@ -214,9 +212,7 @@ mod unit_tests {
         let parent2 = vec![6, 7, 8, 9, 10];
         let crossover_rate = 0.0; // No crossover
 
-
         let (child1, child2) = crossover(&parent1, &parent2, crossover_rate);
-
 
         assert_eq!(child1, parent1);
         assert_eq!(child2, parent2);
@@ -239,9 +235,7 @@ mod unit_tests {
         assert_ne!(child1, parent1);
         assert_ne!(child2, parent2);
         assert_ne!(child1, child2);
-
-
-        }
+    }
 
     #[test]
     fn test_mutate_zeros_with_rate_1() {
@@ -263,7 +257,6 @@ mod unit_tests {
         assert_eq!(mutated_genome.len(), 4);
     }
 
-
     #[test]
     fn test_mutate_population_fitness_all_ones() {
         let num_times = 100_000;
@@ -276,8 +269,10 @@ mod unit_tests {
             mutated_gen_fitness.push(get_genome_fitness(&mutated_genome));
         }
 
-        let avg_mutation_gen_fitness: f64 = mutated_gen_fitness.iter().sum::<f64>() / mutated_gen_fitness.len() as f64;
-        assert!(0.49 <= avg_mutation_gen_fitness && avg_mutation_gen_fitness <= 0.51);
+        let avg_mutation_gen_fitness: f64 =
+            mutated_gen_fitness.iter().sum::<f64>() / mutated_gen_fitness.len() as f64;
+        assert!(0.49 <= avg_mutation_gen_fitness);
+        assert!(avg_mutation_gen_fitness <= 0.51);
     }
 
     #[test]
@@ -293,8 +288,10 @@ mod unit_tests {
             mutated_gen_fitness.push(get_genome_fitness(&mutated_genome));
         }
 
-        let avg_mutation_gen_fitness: f64 = mutated_gen_fitness.iter().sum::<f64>() / mutated_gen_fitness.len() as f64;
-        assert!(0.49 <= avg_mutation_gen_fitness && avg_mutation_gen_fitness <= 0.51);
+        let avg_mutation_gen_fitness: f64 =
+            mutated_gen_fitness.iter().sum::<f64>() / mutated_gen_fitness.len() as f64;
+        assert!(0.49 <= avg_mutation_gen_fitness);
+        assert!(avg_mutation_gen_fitness <= 0.51);
     }
 
     #[test]
@@ -319,7 +316,8 @@ mod unit_tests {
         );
 
         let new_population_fitness = calculate_population_fitness(&new_population);
-        let new_population_fitness_avg = get_generation_fitness(&new_population_fitness, population_size);
+        let new_population_fitness_avg =
+            get_generation_fitness(&new_population_fitness, population_size);
 
         assert_eq!(new_population.len(), population_size);
         assert!(population_fitness_avg * 0.8 <= new_population_fitness_avg);
@@ -348,18 +346,16 @@ mod unit_tests {
             verbose,
         );
 
-
         // Check if generation is less than or equal to max_generations
         assert!(generation <= max_generations);
 
         // Check if generation_fitness and best_fitness are within the range [0, 1]
-        assert!(generation_fitness >= 0.0 && generation_fitness <= 1.0);
-        assert!(best_fitness >= 0.0 && best_fitness <= 1.0);
+        assert!(generation_fitness >= 0.0);
+        assert!(generation_fitness <= 1.0);
+        assert!(best_fitness >= 0.0);
+        assert!(best_fitness <= 1.0);
     }
-
 }
-
-
 
 mod integration_tests {
     use super::*;
@@ -379,7 +375,8 @@ mod integration_tests {
         }
 
         let fitness_avg: f64 = random_fitness.iter().sum::<f64>() / random_fitness.len() as f64;
-        assert!(0.49 <= fitness_avg && fitness_avg <= 0.51);
+        assert!(0.49 <= fitness_avg);
+        assert!(fitness_avg <= 0.51);
     }
 
     #[test]
@@ -402,7 +399,7 @@ mod integration_tests {
             new_population.push(mutate(&offspring1, mutation_rate));
             new_population.push(mutate(&offspring2, mutation_rate));
         }
-        if population_size % 2 != 0{
+        if population_size % 2 != 0 {
             let parent = select_parent(&population, &fitness_values, "roulette");
             new_population.push(mutate(&parent, mutation_rate));
         }
@@ -410,7 +407,8 @@ mod integration_tests {
         let fitness_values = calculate_population_fitness(&new_population);
         let generation_fitness = get_generation_fitness(&fitness_values, population_size);
 
-        assert!(0.02 <= generation_fitness && generation_fitness <= 0.04);
+        assert!(0.02 <= generation_fitness);
+        assert!(generation_fitness <= 0.04);
     }
 
     #[test]
@@ -442,8 +440,11 @@ mod integration_tests {
         }
 
         let avg_best_fitness: f64 = generation_fitness.iter().sum::<f64>() / num_times as f64;
-        let avg_best_genome_fitness: f64 = best_genome_fitness.iter().sum::<f64>() / num_times as f64;
-        assert!(0.06 <= avg_best_fitness && avg_best_fitness <= 0.073);
-        assert!(0.25 <= avg_best_genome_fitness && avg_best_genome_fitness <= 0.45);
+        let avg_best_genome_fitness: f64 =
+            best_genome_fitness.iter().sum::<f64>() / num_times as f64;
+        assert!(0.06 <= avg_best_fitness);
+        assert!(avg_best_fitness <= 0.073);
+        assert!(0.25 <= avg_best_genome_fitness);
+        assert!(avg_best_genome_fitness <= 0.45);
     }
 }

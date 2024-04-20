@@ -1,14 +1,16 @@
-pub fn generate_equally_spaced_values(mut min_val: f64, mut max_val: f64, length: usize, invert: bool) -> Vec<f64> {
+pub fn generate_equally_spaced_values(
+    mut min_val: f64,
+    mut max_val: f64,
+    length: usize,
+    invert: bool,
+) -> Vec<f64> {
     if length <= 1 {
         return vec![min_val]; // Return a single value if length is 1 or less
     }
 
-    if invert{
-        let temp_max_val = min_val;
-        min_val = max_val;
-        max_val = temp_max_val;
+    if invert {
+        std::mem::swap(&mut min_val, &mut max_val)
     }
-
 
     let step = (max_val - min_val) / ((length - 1) as f64);
     let mut values: Vec<f64> = Vec::with_capacity(length);
@@ -18,7 +20,6 @@ pub fn generate_equally_spaced_values(mut min_val: f64, mut max_val: f64, length
     }
     values
 }
-
 
 pub fn distribute_run_times(mut num_processes: usize, mut num_iterations: usize) -> Vec<usize> {
     if num_processes < 1 {
