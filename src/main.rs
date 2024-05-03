@@ -14,12 +14,12 @@ mod results;
 use results::Results;
 
 // Constants
-const RUN_TIMES: usize = 10;
-const GENERATIONS: u32 = 500;
-const POPULATION_SIZE: usize = 90;
-const GENOME_LENGTH: usize = 25;
+const RUN_TIMES: usize = 8;
+const GENERATIONS: u32 = 400;
+const POPULATION_SIZE: usize = 50;
+const GENOME_LENGTH: usize = 35;
 const SELECT_PARENT_MODE: &str = "tournament"; // tournament or roulette. Tournament usually converges faster and yields better results.
-const TARGET_GENERATION_FITNESS: f64 = 0.995; // When a generation is considered fit enough to skip the next iterations. Values close to 1.0 will yield better results.
+const TARGET_GENERATION_FITNESS: f64 = 0.998; // When a generation is considered fit enough to skip the next iterations. Values close to 1.0 will yield better results.
 const TARGET_PROBLEM_FITNESS: f64 = 0.999; // When the problem is marked as solved. Values very close to 1.0 will not stop the execution.
 const MUTATION_RATE_MIN: f64 = 0.001;
 const MUTATION_RATE_MAX: f64 = 0.01;
@@ -86,7 +86,7 @@ pub fn process_genetic_algorithm(mutation_rate_values: &[f64], crossover_rate_va
                 prev_best_score = score;
             }
 
-            if prev_local_score < score && i != 0 {
+            if prev_local_score < (score * 0.9) && i != 0 {
                 // Skip this loop since the score is not improving
                 pbar.update(crossover_rate_values.len() - i).unwrap();
                 break;
@@ -124,8 +124,8 @@ fn main() {
     Population Size:       {}
     Genome Length:         {}
     Parent selection mode: {}
-    Mutation Rate:         {:.4} to {:.4}
-    Crossover Rate:        {:.4} to {:.4}",
+    Mutation Rate:         {:.4} to {:.4} with {} steps
+    Crossover Rate:        {:.4} to {:.4} with {} steps",
         RUN_TIMES,
         GENERATIONS,
         POPULATION_SIZE,
@@ -133,8 +133,10 @@ fn main() {
         SELECT_PARENT_MODE,
         mutation_rate_values.first().unwrap_or(&0.0),
         mutation_rate_values.last().unwrap_or(&0.0),
+        mutation_rate_values.len(),
         crossover_rate_values.first().unwrap_or(&0.0),
         crossover_rate_values.last().unwrap_or(&0.0),
+        crossover_rate_values.len(),
     );
     process_genetic_algorithm(&mutation_rate_values, &crossover_rate_values)
 }
